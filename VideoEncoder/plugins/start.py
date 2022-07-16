@@ -18,7 +18,7 @@ from pyrogram import Client, filters
 
 from .. import (audio, crf, doc_thumb, preset, resolution, sudo_users, tune,
                 upload_doc)
-from ..utils.utils import check_user, output, start
+from ..utils.utils import check_user
 
 
 @Client.on_message(filters.command('start'))
@@ -26,8 +26,8 @@ async def start_message(app, message):
     check = await check_user(message)
     if not check:
         return
-    text = f"Hey! I'm <a href='https://telegra.ph/file/11379aba315ba245ebc7b.jpg'>VideoEncoder</a>. I can encode telegram files in x264.\n\nPress /help for my commands :)"
-    await message.reply(text=text, reply_markup=start)
+    text = f"Hey! I'm VideoEncoder. I can encode telegram files in x264.\n\nPress /help for my commands :)"
+    await message.reply(text=text)
 
 
 @Client.on_message(filters.command('help'))
@@ -43,7 +43,7 @@ async def help_message(app, message):
 • /sthumb - Save Thumb
 • /dthumb - Clear Thumb.
 • /logs - check logs."""
-    await message.reply(text=text, reply_markup=output)
+    await message.reply(text=text)
 
 
 @Client.on_message(filters.command('vset'))
@@ -53,7 +53,7 @@ async def vset(app, message):
         return
     text = f'''<b>Encode Settings</b>
 Tune: <code>{tune}</code> | <code>Preset: {preset}</code>
-Audio: <code>{audio} | <code>CRF: {crf}</code>
+Audio: <code>{audio}</code> | <code>CRF: {crf}</code>
 Resolution: <code>{resolution}</code>
 
 <b>Upload Settings</b>
@@ -63,7 +63,7 @@ Doc thumb: <code>{'True' if (doc_thumb) else 'False'}</code>
 <b>Sudo Users</b>
 <code>{sudo_users}</code>
 '''
-    await message.reply(text=text, reply_markup=start)
+    await message.reply(text=text)
 
 
 @Client.on_message(filters.command('logs'))

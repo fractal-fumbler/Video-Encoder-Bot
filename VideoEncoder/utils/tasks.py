@@ -49,7 +49,7 @@ async def handle_task(message: Message):
             await handle_upload(new_file, message, msg)
             await msg.edit_text('Video Encoded Successfully!')
         else:
-            await message.reply_text("<code>Something wents wrong while encoding your file.</code>")
+            await message.reply_text("<code>Something went wrong while encoding your file.</code>")
         os.remove(filepath)
     except MessageNotModified:
         pass
@@ -83,7 +83,6 @@ async def handle_upload(new_file, message, msg):
             new_file,
             thumb=thumb,
             caption=filename,
-            reply_markup=output,
             parse_mode=None,
             progress=progress_for_pyrogram,
             progress_args=("Uploading ...", msg, c_time)
@@ -93,7 +92,6 @@ async def handle_upload(new_file, message, msg):
             new_file,
             supports_streaming=True,
             parse_mode=None,
-            reply_markup=output,
             caption=filename,
             thumb=thumb,
             duration=duration,

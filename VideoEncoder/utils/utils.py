@@ -22,15 +22,11 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from .. import sudo_users
 
 output = InlineKeyboardMarkup([
-    [InlineKeyboardButton("Developer", url="https://github.com/WeebTime/"),
-     InlineKeyboardButton("Source", url="https://github.com/WeebTime/Video-Encoder-Bot")]
+    [InlineKeyboardButton("Developer", url="https://github.com/WeebTime/")]
 ])
 
 start = InlineKeyboardMarkup([
-    [InlineKeyboardButton("Developer", url="https://github.com/WeebTime/"),
-     InlineKeyboardButton("Source", url="https://github.com/WeebTime/Video-Encoder-Bot")],
-    [InlineKeyboardButton("Support", url="https://t.me/joinchat/4PQUG5J6aRI3NGQ1"),
-     InlineKeyboardButton("Channel", url="https://t.me/WeebZoneIndia")]
+    [InlineKeyboardButton("Developer", url="https://github.com/WeebTime/")]
 ])
 
 
@@ -41,11 +37,9 @@ async def check_user(message):
         user_id = message.chat.id
     if user_id in sudo_users:
         return 'Sudo'
-    elif user_id == 885190545:
-        return 'Dev'
     else:
         text = f"Oops! Not a authorised user, host a video encoder bot for yourself."
-        await message.reply(text=text, reply_markup=start)
+        await message.reply(text=text)
         return None
 
 

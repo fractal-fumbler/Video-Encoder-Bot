@@ -40,6 +40,6 @@ along with this program. If not, see .'''
 @a.on_message(filters.command('so' 'ur' 'ce'))
 async def g_s(_, message):
     try:
-        await message.reply(text=sauce, reply_markup=utils.output, disable_web_page_preview=True)
+        await message.reply(text=sauce, disable_web_page_preview=True)
     except RPCError:
         pass

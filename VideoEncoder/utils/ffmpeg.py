@@ -42,7 +42,7 @@ def get_codec(filepath, channel='v:0'):
 async def encode(filepath):
     path, extension = os.path.splitext(filepath)
     name = path.split('/')
-    output_filepath = encode_dir + name[len(name)-1] + '.mkv'
+    output_filepath = encode_dir + name[len(name)-1] + '.mp4'
     assert(output_filepath != filepath)
 
     if os.path.isfile(output_filepath):
@@ -51,7 +51,7 @@ async def encode(filepath):
         print('[Encode]: ' + filepath)
 
     # Codec and Bits
-    codec = '-c:v libx264 -pix_fmt yuv420p'
+    codec = '-c:v libx264 -x264-params psnr=0:ssim=0:cabac=1:rc-lookahead=250:bframes=16:b-bias=0:b-adapt=2:b-pyramid=1:ref=16:mixed-refs=1:deblock=-3,-3:ipratio=1.3:pbratio=1.2:keyint=250:open_gop=0:qpmin=18:qpmax=69:qpstep=4:aq-mode=3:aq-strength=0.8:weightb=1:weightp=2:analyse=0x3,0x133:me=umh:subme=11:psy=1:merange=48:mvrange=511:subq=9:8x8dct=1:trellis=2:no-fast-pskip=1:chroma-qp-offset=-2:direct=auto:partitions=all:scenecut=40:cplxblur=20:qblur=0.5:psy-rd=0.9,0.2:no-mbtree=0:constrained-intra=1:qcomp=0.8:direct=auto:no-dct-decimate=1:nr=20:threads=12:crf_max=51 -pix_fmt yuv420p'
 
     # CRF
     crf = f'-crf {c}'
@@ -86,7 +86,7 @@ async def encode(filepath):
     else:
         audio_opts = '-map 0:a?'
         if a == 'aac':
-            audio_opts += ' -c:a aac -b:a 128k'
+            audio_opts += ' -c:a libfdk_aac -b:a 32k -vbr 2 -profile:a aac_he_v2 -ac 2 -ar 44100'
         elif a == 'opus':
             audio_opts += ' -c:a libopus -vbr on -b:a 96k'
         elif a == 'copy':
@@ -106,11 +106,11 @@ async def encode(filepath):
     else:
         resolution = ''
 
-    finish = '-threads 8'
+    finish = '-threads 2 -movflags +faststart'
 
     # Finally
-    command = ['ffmpeg', '-y', '-i', filepath]
-    command.extend((codec.split() + preset.split() + video_opts.split() +
+    command = ['ffmpeg', '-y', '-analyzeduration', '500M', '-probesize', '500M', '-i', filepath]
+    command.extend((codec.split() + video_opts.split() +
                    crf.split() + resolution.split() + subtitles.split() + audio_opts.split() + finish.split()))
     proc = await asyncio.create_subprocess_exec(*command, output_filepath, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     await proc.communicate()
